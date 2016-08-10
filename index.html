@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>Call Center Demo UI</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
@@ -13,11 +13,11 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Login</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal">
+					<div class="alert alert-danger hide" id="loginerror"></div>
+					<form class="form-horizontal" onsubmit="login()" id="loginform">
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Username</label>
 							<div class="col-sm-10"><input type="text" class="form-control" id="username"></div>
@@ -26,9 +26,10 @@
 							<label for="" class="col-sm-2 control-label">Password</label>
 							<div class="col-sm-10"><input type="password" class="form-control" id="password"></div>
 						</div>
+						<input type="submit" style="display: none">
 					</form>
 				</div>
-				<div class="modal-footer"><button class="btn tn-default">Cancel</button><button class="btn btn-primary" id="loginbutton">Login</button></div>
+				<div class="modal-footer"><button class="btn btn-primary" id="loginbutton">Login</button></div>
 			</div>
 		</div>
 	</div>
@@ -45,8 +46,42 @@
 				<li><a href="#settings" data-toggle="tabs">Settings</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="campaign"><h4>Campaign</h4></div>
-				<div class="tab-pane" id="settings"><h4>Settings</h4></div>
+				<div class="tab-pane active" id="campaign" style="padding-top: 10px">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="well">
+								<strong>Campaign List</strong>
+								<ol id="campaignlist"></ol>
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="btn-group">
+								<button class="btn btn-primary" id="joincampaign">Join Campaign</button>
+								<button class="btn btn-success" id="nextcall">Next Call</button>
+								<button class="btn btn-danger" id="hangupcall">Hangup Call</button>
+								<button class="btn btn-warning" id="leavevoicemail">Leave Voicemail</button>
+							</div>
+							<div class="well" style="margin-top: 10px">
+								<h4>Campaign Script</h4>
+								<div id="campaignscript"></div>
+							</div>
+							<div class="well" style="margin-top: 10px">
+								<h4>Campaign Survey</h4>
+								<div id="campaignsurvey"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="settings" style="padding-top: 10px">
+					<div class="col-md-6">
+						<h4>Settings</h4>
+						<div class="well">
+							<form action="" id="settingsform" onsubmit="submitSettings()">
+
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
