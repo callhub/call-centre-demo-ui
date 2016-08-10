@@ -1,12 +1,13 @@
 var token = '';
 var conference_uuid = '';
+var baseurl = 'https://api.callhub.io';
 
 function login() {
 	var username = $('#username').val();
 	var password = $('#password').val();
 	if(username && password) {
 		$.ajax({
-			url: 'https://api.callhub.io/v2/agent-key/',
+			url: baseurl + '/v2/agent-key/',
 			data: {
 				username: username,
 				password: password
@@ -18,9 +19,10 @@ function login() {
 				$('#loginmodal').modal('hide');
 
 				checkStatus();
-				setInterval(checkStatus, 30000);
+				// setInterval(checkStatus, 30000);
 
 				allCampaignInformation();
+				getUserSettings();
 			}
 			else {
 				$('#loginerror').removeClass('hide');
@@ -34,7 +36,7 @@ function login() {
 }
 function checkStatus() {
 	$.ajax({
-		url: 'https://api.callhub.io/v2/agent-status/',
+		url: baseurl + '/v2/agent-status/',
 		method: 'GET',
 		headers: {
 			'Authorization': 'Token ' + token
@@ -73,26 +75,45 @@ function checkStatus() {
 
 function getUserSettings() {
 	$.ajax({
-		url: 'https://api.callhub.io/v2/user-details/',
+		url: baseurl + '/v2/user-details/',
 		headers: {
 			'Authorization': 'Token ' + token
 		},
 		method: 'GET'
 	}).done(function(data) {
-		console.log('Agent Details: ', data);
+		$('#settings_firstname').val(data.user.first_name);
+		$('#settings_lastname').val(data.user.last_name);
+		$('#settings_email').val(data.user.email);
+		$('#settings_country').val(data.agent.country);
+		$('#settings_phoneno').val(data.agent.phone_no);
+		$('#settings_language').val(data.agent.language);
+	});
+}
+
+function submitUserSettings() {
+	$.ajax({
+		url: baseurl + '/v2/user-details/',
+		data: $('#settingsform').serialize(),
+		headers: {
+			'Authorization': 'Token ' + token
+		},
+		method: 'POST'
+	}).done(function(data) {
+		console.log(data.success_msg);
+		getUserSettings();
 	});
 }
 
 function allCampaignInformation() {
 	$.ajax({
-		url: 'https://api.callhub.io/v2/agent-campaigns/',
+		url: baseurl + '/v2/agent-campaigns/',
 		method: 'GET',
 		headers: {
 			'Authorization': 'Token ' + token
 		},
 	}).done(function(data) {
 		$.ajax({
-			url: 'https://api.callhub.io/v2/campaign-info/?id=' + JSON.stringify(data.campaigns),
+			url: baseurl + '/v2/campaign-info/?id=' + JSON.stringify(data.campaigns),
 			method: 'GET',
 			headers: {
 				'Authorization': 'Token ' + token
@@ -110,7 +131,7 @@ function getCampaignInformation(id) {
 	$('#joincampaign').attr('onclick', 'joinCampaign(' + id + ')');
 	var campaignarray = [id]
 	$.ajax({
-		url: 'https://api.callhub.io/v2/campaign-info/?id=' + JSON.stringify(campaignarray),
+		url: baseurl + '/v2/campaign-info/?id=' + JSON.stringify(campaignarray),
 		method: 'GET',
 		headers: {
 			'Authorization': 'Token ' + token
@@ -120,7 +141,7 @@ function getCampaignInformation(id) {
 	});
 
 	$.ajax({
-		url: 'https://api.callhub.io/v2/script-sections/' + id + '/',
+		url: baseurl + '/v2/script-sections/' + id + '/',
 		method: 'GET',
 		headers: {
 			'Authorization': 'Token ' + token
@@ -132,7 +153,7 @@ function getCampaignInformation(id) {
 
 function joinCampaign(id) {
 	$.ajax({
-		url: 'https://api.callhub.io/v2/conference/',
+		url: baseurl + '/v2/conference/',
 		data: {
 			campaign_id: id
 		},
@@ -141,10 +162,11 @@ function joinCampaign(id) {
 		},
 		method: 'POST'
 	}).done(function(data) {
+		setInterval(checkStatus, 30000);
 		console.log('Conference created successfully');
 		conference_uuid = data.conference_uuid;
 		$.ajax({
-			url: 'https://euler.callhub.io/v2/conference/' + conference_uuid + '/agent/',
+			url: baseurl + '/v2/conference/' + conference_uuid + '/agent/',
 			data: {
 				'endpoint': 'PHONE'
 			},
@@ -164,7 +186,7 @@ function joinCampaign(id) {
 
 function leaveCampaign(id) {
 	$.ajax({
-		url: 'https://euler.callhub.io/v2/conference/' + conference_uuid + '/agent/',
+		url: baseurl + '/v2/conference/' + conference_uuid + '/agent/',
 		headers: {
 			'Authorization': 'Token ' + token
 		},
@@ -185,7 +207,8 @@ $(document).ready(function() {
 		show: true
 	});
 	$('#loginbutton').click(login);
-	$("#loginform").submit(function(e) {
+	// $('#submitsettings').click(submitUserSettings);
+	$("#loginform, #settingsform").submit(function(e) {
 		e.preventDefault();
 	});
 

@@ -75,11 +75,35 @@
 				<div class="tab-pane" id="settings" style="padding-top: 10px">
 					<div class="col-md-6">
 						<h4>Settings</h4>
-						<div class="well">
-							<form action="" id="settingsform" onsubmit="submitSettings()">
-
-							</form>
-						</div>
+						<form action="" id="settingsform" onsubmit="submitUserSettings()" class="form-horizontal">
+							<div class="form-group">
+								<label for="" class="control-label col-sm-3">First Name</label>
+								<div class="col-sm-9"><input type="text" name="user[first_name]" id="settings_firstname" class="form-control"></div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-sm-3">Last Name</label>
+								<div class="col-sm-9"><input type="text" name="user[last_name]" id="settings_last_name" class="form-control"></div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-sm-3">Email</label>
+								<div class="col-sm-9"><input type="email" name="user[email]" id="settings_email" class="form-control"></div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-sm-3">Country</label>
+								<div class="col-sm-9"><input type="text" name="agent[country]" id="settings_country" class="form-control"></div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-sm-3">Phone Number</label>
+								<div class="col-sm-9"><input type="text" name="agent[phone_no]" id="settings_phoneno" class="form-control"></div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-sm-3">Language</label>
+								<div class="col-sm-9"><input type="text" name="agent[language]" id="settings_language" class="form-control"></div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-3"><button type="submit" class="btn btn-primary" id="submitsettings">Submit</button></div>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
